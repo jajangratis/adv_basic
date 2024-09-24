@@ -6,12 +6,15 @@ import 'package:google_fonts/google_fonts.dart';
 class ResultScreen extends StatelessWidget {
   const ResultScreen({
     super.key, 
-    required this.chosenAnswers
+    required this.chosenAnswers,
+    required this.onRestart,
   });
+
+  final void Function() onRestart;
 
   final List<String> chosenAnswers;
   
-  List<Map<String, Object>> getSummarydata() {
+  List<Map<String, Object>> get summaryData {
     final List<Map<String, Object>> summary = [];
     for (var i = 0; i < chosenAnswers.length; i++) {
       summary.add({
@@ -26,11 +29,8 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final summaryData = getSummarydata();
     final numTotalQuestions = questions.length;
-    final numCorrectQuestions = summaryData.where((data) {
-      return data['correct_answer'] == data['user_answer'];
-    }).length;
+    final numCorrectQuestions = summaryData.where((data) => data['correct_answer'] == data['user_answer']).length;
 
     return SizedBox(
       width: double.infinity,
@@ -44,7 +44,7 @@ class ResultScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               "You answered $numCorrectQuestions out $numTotalQuestions questions correctly", 
               style: GoogleFonts.lato(
-                color: const Color.fromARGB(255, 143, 121, 230),
+                color: const Color.fromARGB(255, 203, 199, 221),
                 fontSize: 24,
                 fontWeight: FontWeight.bold
               )
@@ -53,7 +53,7 @@ class ResultScreen extends StatelessWidget {
             QuestionSummary(summaryData),
             const SizedBox(height: 30,),
             TextButton.icon(
-            onPressed: () {}, 
+            onPressed: onRestart, 
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
             ),
